@@ -8,7 +8,8 @@ window.CTF_PROBLEMS = [
     resources: [
       { label: "ไม่มีจ้า" }
     ],
-    hint: "ใช้การถอดรหัสด้วย ROT13"
+    hint: "ใช้การถอดรหัสด้วย ROT13",
+    answerHash: "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" // SHA-256 of normalized answer
   },
   {
     id: "engcu",
@@ -17,7 +18,8 @@ window.CTF_PROBLEMS = [
     resources: [
       { label: "ภาพถ่ายสุดลึกลับ", url: "../assets/img/ENG.png" }
     ],
-    hint: "ลองตรวจสอบ metadata ของภาพ"
+    hint: "ลองตรวจสอบ metadata ของภาพ",
+    answerHash: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35" // SHA-256 of normalized answer
   },
   {
     id: "web-author",
@@ -26,7 +28,8 @@ window.CTF_PROBLEMS = [
     resources: [
       { label: "Quote", url: "https://mularstyle.github.io/QuoteOfTheDay/" }
     ],
-    hint: "ลอง Inspect หน้าเว็บ"
+    hint: "ลอง Inspect หน้าเว็บ",
+    answerHash: "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a" // SHA-256 of normalized answer
   }
 ];
 

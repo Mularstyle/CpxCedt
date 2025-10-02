@@ -16,6 +16,15 @@
     return (str || '').trim().toLowerCase();
   }
 
+  // SHA-256 hash function for client-side answer verification
+  async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
   function markSolved(problemId) {
     try { localStorage.setItem(window.ctfSolvedKey(problemId), '1'); } catch (_) {}
   }
@@ -70,20 +79,31 @@
       feedback.textContent = msg;
     }
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
       var user = normalize(input.value);
-      var answers = form && form._answers ? form._answers : null;
-      var ans = normalize(answers && answers[problem.id]);
-      if (!ans) {
-        setFeedback(false, 'Answer key not available. Configure local answers.');
+      
+      if (!user) {
+        setFeedback(false, 'Please enter an answer.');
         return;
       }
-      if (user && ans && user === ans) {
-        setFeedback(true, 'Correct! Marked as solved.');
-        markSolved(problem.id);
-      } else {
-        setFeedback(false, 'Incorrect. Try again.');
+      
+      if (!problem.answerHash) {
+        setFeedback(false, 'Answer verification not configured for this problem.');
+        return;
+      }
+      
+      try {
+        var userHash = await sha256(user);
+        if (userHash === problem.answerHash) {
+          setFeedback(true, 'Correct! Marked as solved.');
+          markSolved(problem.id);
+        } else {
+          setFeedback(false, 'Incorrect. Try again.');
+        }
+      } catch (error) {
+        setFeedback(false, 'Error verifying answer. Please try again.');
+        console.error('Hash verification error:', error);
       }
     });
 
@@ -105,18 +125,7 @@
       return;
     }
     renderProblem(problem);
-    // Load local answers (gitignored). If missing, still render but checks will be disabled.
-    fetch('assets/answers/answers.local.json', { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('not found'); return r.json(); })
-      .then(function (json) {
-        setupAnswerForm(problem);
-        // Attach after form exists: set on a property read by submit handler
-        var form = document.getElementById('answer-form');
-        form._answers = json;
-      })
-      .catch(function () {
-        setupAnswerForm(problem);
-      });
+    setupAnswerForm(problem);
   }
 
   document.addEventListener('DOMContentLoaded', init);
