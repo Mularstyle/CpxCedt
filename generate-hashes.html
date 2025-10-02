@@ -16,20 +16,25 @@
 </head>
 <body>
     <h1>CTF Answer Hash Generator</h1>
-    <p>Use this tool to generate SHA-256 hashes for your CTF answers. The hash can be safely stored in your public code.</p>
+    <p>Use this tool to generate <strong>salted SHA-256 hashes</strong> for your CTF answers. Even if someone sees the hash in your code, they cannot reverse it to find the answer due to the unique salt.</p>
     
     <div class="form-group">
         <label for="answer">Answer (will be normalized: trimmed and lowercased):</label>
-        <input type="text" id="answer" placeholder="e.g., FLAG{example_answer}">
+        <input type="text" id="answer" placeholder="e.g., CPxCEDT{ENG04}">
     </div>
     
-    <button onclick="generateHash()">Generate Hash</button>
+    <div class="form-group">
+        <label for="salt">Salt (unique string for this problem):</label>
+        <input type="text" id="salt" placeholder="e.g., my_ctf_problem_unique_salt_001">
+    </div>
+    
+    <button onclick="generateHash()">Generate Salted Hash</button>
     
     <div id="output" class="output" style="display: none;">
         <h3>Generated Hash:</h3>
         <div>Normalized answer: <strong id="normalized"></strong></div>
         <div class="hash" id="hash"></div>
-        <p><em>Copy this hash and add it as the <code>answerHash</code> property in your problem data.</em></p>
+        <p><em>Copy this hash and add it as the <code>answerHash</code> property in your problem data. Make sure to also include the <code>salt</code> property.</em></p>
     </div>
 
     <script>
@@ -37,9 +42,10 @@
             return (str || '').trim().toLowerCase();
         }
 
-        async function sha256(text) {
+        async function saltedSha256(text, salt) {
             const encoder = new TextEncoder();
-            const data = encoder.encode(text);
+            const saltedText = salt + text + salt; // Same as problem.js
+            const data = encoder.encode(saltedText);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -47,13 +53,20 @@
 
         async function generateHash() {
             const answer = document.getElementById('answer').value;
+            const salt = document.getElementById('salt').value;
+            
             if (!answer) {
                 alert('Please enter an answer');
                 return;
             }
+            
+            if (!salt) {
+                alert('Please enter a salt (unique string for this problem)');
+                return;
+            }
 
             const normalized = normalize(answer);
-            const hash = await sha256(normalized);
+            const hash = await saltedSha256(normalized, salt);
             
             document.getElementById('normalized').textContent = normalized;
             document.getElementById('hash').textContent = hash;

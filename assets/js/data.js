@@ -9,7 +9,8 @@ window.CTF_PROBLEMS = [
       { label: "ไม่มีจ้า" }
     ],
     hint: "ใช้การถอดรหัสด้วย ROT13",
-    answerHash: "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" // SHA-256 of normalized answer
+    salt: "rot131313",
+    answerHash: "707a5568d70a71c831ce58095f9cf9ae3ecdc3cce932b27739163f8724549302" // Use generate-hashes.html to create real hash
   },
   {
     id: "engcu",
@@ -19,7 +20,8 @@ window.CTF_PROBLEMS = [
       { label: "ภาพถ่ายสุดลึกลับ", url: "../assets/img/ENG.png" }
     ],
     hint: "ลองตรวจสอบ metadata ของภาพ",
-    answerHash: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35" // SHA-256 of normalized answer
+    salt: "engcuengcu",
+    answerHash: "7aef6dcd34d2b5be91bea0c7ced53756bce46d5ced4ce3a3a358473bb0878c1e" // Use generate-hashes.html to create real hash
   },
   {
     id: "web-author",
@@ -29,7 +31,8 @@ window.CTF_PROBLEMS = [
       { label: "Quote", url: "https://mularstyle.github.io/QuoteOfTheDay/" }
     ],
     hint: "ลอง Inspect หน้าเว็บ",
-    answerHash: "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a" // SHA-256 of normalized answer
+    salt: "webwebweb",
+    answerHash: "c2dd1e9f5dbb138a9820ead799f9e762097c677776d97083ef149da89520382a" // Use generate-hashes.html to create real hash
   }
 ];
 

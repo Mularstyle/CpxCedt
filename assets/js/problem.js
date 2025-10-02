@@ -16,10 +16,11 @@
     return (str || '').trim().toLowerCase();
   }
 
-  // SHA-256 hash function for client-side answer verification
-  async function sha256(text) {
+  // Salted SHA-256 hash function for secure answer verification
+  async function saltedSha256(text, salt) {
     const encoder = new TextEncoder();
-    const data = encoder.encode(text);
+    const saltedText = salt + text + salt; // Salt before and after for extra security
+    const data = encoder.encode(saltedText);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -88,13 +89,13 @@
         return;
       }
       
-      if (!problem.answerHash) {
+      if (!problem.answerHash || !problem.salt) {
         setFeedback(false, 'Answer verification not configured for this problem.');
         return;
       }
       
       try {
-        var userHash = await sha256(user);
+        var userHash = await saltedSha256(user, problem.salt);
         if (userHash === problem.answerHash) {
           setFeedback(true, 'Correct! Marked as solved.');
           markSolved(problem.id);

@@ -23,18 +23,20 @@ Deployment (GitHub Pages)
 3) The site will be available at: https://<your-username>.github.io/<repo-name>/
 
 Answer Security & GitHub Pages
-This CTF uses SHA-256 hashing for secure answer verification that works on GitHub Pages:
+This CTF uses **salted SHA-256 hashing** for highly secure answer verification that works on GitHub Pages:
 - ✅ Works on GitHub Pages (no external files needed)
-- ✅ Answers stay secret (only hashes are visible in code)
-- ✅ Still validates answers correctly
+- ✅ Answers stay secret (only salted hashes are visible in code)
+- ✅ **Extremely secure** - even with hash visible, answers cannot be reverse-engineered
+- ✅ Each problem has unique salt making brute force attacks impractical
 
 Adding New Problems
 1) Edit assets/js/data.js to add your problem metadata
-2) Use generate-hashes.html to create an answer hash:
+2) Use generate-hashes.html to create a salted answer hash:
    - Open generate-hashes.html in your browser
    - Enter your answer (it will be normalized: trimmed and lowercased)
+   - Enter a unique salt for this problem (make it long and unique)
    - Copy the generated hash
-   - Add it as the "answerHash" property in your problem data
+   - Add both "salt" and "answerHash" to your problem data
 
 Example problem entry:
 {
@@ -45,7 +47,8 @@ Example problem entry:
     { label: "Hint resource", url: "https://example.com" }
   ],
   hint: "Try looking at...",
-  answerHash: "abc123..." // Generated hash from generate-hashes.html
+  salt: "my_unique_problem_salt_string_2024_001",
+  answerHash: "abc123..." // Generated salted hash from generate-hashes.html
 }
 
 Notes
