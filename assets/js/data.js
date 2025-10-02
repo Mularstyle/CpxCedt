@@ -17,7 +17,7 @@ window.CTF_PROBLEMS = [
     title: "ENG CU",
     description: "ภาพนี้ถูกถ่ายที่อาคารไหนของวิศวะจุฬา (ตอบในรูปแบบ CPxCEDT{ENG???})",
     resources: [
-      { label: "ภาพถ่ายสุดลึกลับ", url: "..\img\ENG.png" }
+      { label: "ภาพถ่ายสุดลึกลับ", url: "assets/img/ENG.jpg" }
     ],
     hint: "ลองตรวจสอบ metadata ของภาพ",
     salt: "engcuengcu",
