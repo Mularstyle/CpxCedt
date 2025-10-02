@@ -1,0 +1,10 @@
+# Local answers (do not commit secrets)
+assets/answers/answers.local.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
+build/
+

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CTF | Problem</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="data:,">
+    <meta name="description" content="Problem detail">
+    <meta name="color-scheme" content="light dark">
+</head>
+<body>
+    <header class="site-header">
+        <h1><a href="index.html" class="brand">CPxCEDT CTF</a></h1>
+        <nav>
+            <a href="index.html">All Problems</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <article id="problem" class="problem">
+            <h2 id="problem-title">Problem</h2>
+            <p id="problem-desc"></p>
+
+            <section>
+                <h3>Resources</h3>
+                <ul id="problem-resources" class="resources"></ul>
+            </section>
+
+            <section class="qa">
+                <h3>Answer</h3>
+                <form id="answer-form">
+                    <label for="answer-input" class="visually-hidden">Answer</label>
+                    <input id="answer-input" type="text" placeholder="CPxCEDT{Example}" autocomplete="off" required>
+                    <button type="submit">Submit</button>
+                    <button id="reset-btn" type="button" class="secondary">Reset</button>
+                </form>
+                <div id="answer-feedback" role="status" aria-live="polite"></div>
+            </section>
+
+            <section class="hint">
+                <h3>Hint</h3>
+                <button id="hint-btn" type="button">Show hint</button>
+                <p id="hint-text" class="hint-text" hidden></p>
+            </section>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <span>Good luck!</span>
+    </footer>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/problem.js"></script>
+</body>
+</html>
+
+
+
