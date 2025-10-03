@@ -15,7 +15,7 @@ window.CTF_PROBLEMS = [
   {
     id: "engcu",
     title: "ENG CU",
-    description: "ภาพนี้ถูกถ่ายที่อาคารไหนของวิศวะจุฬา (ตอบในรูปแบบ CPxCEDT{ENG???})",
+    description: "ภาพนี้ถูกถ่ายที่อาคารไหนของวิศวะจุฬา (ตอบในรูปแบบ CPxCEDT{ENG???}) เช่น ENG2 หมายถึงตึกวิศวะ2",
     resources: [
       { label: "ภาพถ่ายสุดลึกลับ", url: "assets/img/ENG.jpg" }
     ],
@@ -26,7 +26,7 @@ window.CTF_PROBLEMS = [
   {
     id: "web-author",
     title: "Web: Author",
-    description: "Flag ซ่อนอยู่ใน html ของเว็บที่ชื่อผู้เขียน",
+    description: "Flag ซ่อนอยู่ใน html ใต้ชื่อผู้เขียนคำคม",
     resources: [
       { label: "Quote", url: "https://mularstyle.github.io/QuoteOfTheDay/" }
     ],
