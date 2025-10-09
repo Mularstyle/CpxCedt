@@ -19,7 +19,7 @@ window.CTF_PROBLEMS = [
     resources: [
       { label: "ภาพถ่ายสุดลึกลับ", url: "assets/img/ENG.jpg" }
     ],
-    hint: "ลองตรวจสอบ metadata ของภาพ",
+    hint: "ลองตรวจสอบ metadata ของภาพ metadata viewer ออนไลน์",
     salt: "engcuengcu",
     answerHash: "7aef6dcd34d2b5be91bea0c7ced53756bce46d5ced4ce3a3a358473bb0878c1e" // Use generate-hashes.html to create real hash
   },
