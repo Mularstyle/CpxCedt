@@ -29,13 +29,20 @@
 
             <section class="qa">
                 <h3>Answer</h3>
+                <div id="subproblem-selector" style="display: none;">
+                    <label for="subproblem-select">Choose subproblem:</label>
+                    <select id="subproblem-select">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
                 <form id="answer-form">
                     <label for="answer-input" class="visually-hidden">Answer</label>
                     <input id="answer-input" type="text" placeholder="CPxCEDT{Example}" autocomplete="off" required>
                     <button type="submit">Submit</button>
-                    <button id="reset-btn" type="button" class="secondary">Reset</button>
+                    <button id="reset-btn" type="button" class="secondary">Reset All</button>
                 </form>
                 <div id="answer-feedback" role="status" aria-live="polite"></div>
+                <div id="subproblem-status" class="subproblem-status"></div>
             </section>
 
             <section class="hint">

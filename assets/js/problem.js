@@ -16,22 +16,27 @@
     return (str || '').trim().toLowerCase();
   }
 
-  // Salted SHA-256 hash function for secure answer verification
-  async function saltedSha256(text, salt) {
-    const encoder = new TextEncoder();
-    const saltedText = salt + text + salt; // Salt before and after for extra security
-    const data = encoder.encode(saltedText);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  function isSubproblemSolved(problemId, subproblemNumber) {
+    try {
+      return localStorage.getItem(window.ctfSolvedKey(problemId, subproblemNumber)) === '1';
+    } catch (_) { return false; }
   }
 
-  function markSolved(problemId) {
-    try { localStorage.setItem(window.ctfSolvedKey(problemId), '1'); } catch (_) {}
+  function markSubproblemSolved(problemId, subproblemNumber) {
+    try { localStorage.setItem(window.ctfSolvedKey(problemId, subproblemNumber), '1'); } catch (_) {}
   }
 
-  function clearSolved(problemId) {
-    try { localStorage.removeItem(window.ctfSolvedKey(problemId)); } catch (_) {}
+  function clearAllSolved(problemId) {
+    try {
+      var problem = getProblemById(problemId);
+      if (problem && problem.subproblems) {
+        problem.subproblems.forEach(function(subproblem) {
+          localStorage.removeItem(window.ctfSolvedKey(problemId, subproblem.number));
+        });
+      }
+      // Also clear the old format if it exists
+      localStorage.removeItem(window.ctfSolvedKey(problemId));
+    } catch (_) {}
   }
 
   function renderProblem(problem) {
@@ -40,6 +45,8 @@
     var resEl = document.getElementById('problem-resources');
     var hintBtn = document.getElementById('hint-btn');
     var hintText = document.getElementById('hint-text');
+    var subproblemSelector = document.getElementById('subproblem-selector');
+    var subproblemSelect = document.getElementById('subproblem-select');
 
     titleEl.textContent = problem.title;
     descEl.textContent = problem.description;
@@ -67,6 +74,22 @@
         hintBtn.textContent = 'Show hint';
       }
     });
+
+    // Setup subproblem selector when there are subproblems (show even if only 1)
+    if (problem.subproblems && problem.subproblems.length >= 1) {
+      subproblemSelector.style.display = 'block';
+      subproblemSelect.innerHTML = '';
+      var subs = problem.subproblems.slice().sort(function(a, b) { return a.number - b.number; });
+      subs.forEach(function(subproblem, idx) {
+        var option = document.createElement('option');
+        option.value = subproblem.number;
+        option.textContent = 'Subproblem ' + subproblem.number;
+        if (idx === 0) option.selected = true;
+        subproblemSelect.appendChild(option);
+      });
+    } else {
+      subproblemSelector.style.display = 'none';
+    }
   }
 
   function setupAnswerForm(problem) {
@@ -74,13 +97,41 @@
     var input = document.getElementById('answer-input');
     var feedback = document.getElementById('answer-feedback');
     var resetBtn = document.getElementById('reset-btn');
+    var subproblemSelect = document.getElementById('subproblem-select');
+    var subproblemStatus = document.getElementById('subproblem-status');
 
     function setFeedback(ok, msg) {
       feedback.className = ok ? 'ok' : 'err';
       feedback.textContent = msg;
     }
 
-    form.addEventListener('submit', async function (e) {
+    function updateSubproblemStatus() {
+      if (!problem.subproblems || problem.subproblems.length <= 1) {
+        subproblemStatus.style.display = 'none';
+        return;
+      }
+
+      subproblemStatus.style.display = 'block';
+      subproblemStatus.innerHTML = '<h4>Subproblem Progress:</h4>';
+      
+      problem.subproblems.forEach(function(subproblem) {
+        var div = document.createElement('div');
+        div.className = 'subproblem-item' + (isSubproblemSolved(problem.id, subproblem.number) ? ' solved' : '');
+        
+        var label = document.createElement('span');
+        label.textContent = 'Subproblem ' + subproblem.number;
+        
+        var status = document.createElement('span');
+        status.className = 'status';
+        status.textContent = isSubproblemSolved(problem.id, subproblem.number) ? 'Solved' : 'Unsolved';
+        
+        div.appendChild(label);
+        div.appendChild(status);
+        subproblemStatus.appendChild(div);
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       var user = normalize(input.value);
       
@@ -89,31 +140,45 @@
         return;
       }
       
-      if (!problem.answerHash || !problem.salt) {
-        setFeedback(false, 'Answer verification not configured for this problem.');
+      if (!problem.subproblems || problem.subproblems.length === 0) {
+        setFeedback(false, 'No subproblems configured for this problem.');
         return;
       }
+
+      // Get selected subproblem (or first one if no selector)
+      var selectedNumber = subproblemSelect ? parseInt(subproblemSelect.value) : problem.subproblems[0].number;
+      var selectedSubproblem = problem.subproblems.find(function(sp) { return sp.number === selectedNumber; });
       
-      try {
-        var userHash = await saltedSha256(user, problem.salt);
-        if (userHash === problem.answerHash) {
-          setFeedback(true, 'Correct! Marked as solved.');
-          markSolved(problem.id);
+      if (!selectedSubproblem) {
+        setFeedback(false, 'Invalid subproblem selected.');
+        return;
+      }
+
+      var correctAnswer = normalize(selectedSubproblem.answer);
+      
+      if (user === correctAnswer) {
+        if (isSubproblemSolved(problem.id, selectedNumber)) {
+          setFeedback(true, 'Subproblem ' + selectedNumber + ' already solved!');
         } else {
-          setFeedback(false, 'Incorrect. Try again.');
+          markSubproblemSolved(problem.id, selectedNumber);
+          setFeedback(true, 'Correct! Subproblem ' + selectedNumber + ' marked as solved.');
+          updateSubproblemStatus();
         }
-      } catch (error) {
-        setFeedback(false, 'Error verifying answer. Please try again.');
-        console.error('Hash verification error:', error);
+      } else {
+        setFeedback(false, 'Incorrect answer for subproblem ' + selectedNumber + '. Try again.');
       }
     });
 
     resetBtn.addEventListener('click', function () {
-      clearSolved(problem.id);
-      setFeedback(false, 'Progress cleared for this problem.');
+      clearAllSolved(problem.id);
+      setFeedback(false, 'All progress cleared for this problem.');
       input.value = '';
+      updateSubproblemStatus();
       input.focus();
     });
+
+    // Initialize subproblem status display
+    updateSubproblemStatus();
   }
 
   function init() {

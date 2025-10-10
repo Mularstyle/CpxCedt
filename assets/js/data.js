@@ -9,8 +9,10 @@ window.CTF_PROBLEMS = [
       { label: "ไม่มีจ้า" }
     ],
     hint: "ใช้การถอดรหัสด้วย ROT13",
-    salt: "rot131313",
-    answerHash: "707a5568d70a71c831ce58095f9cf9ae3ecdc3cce932b27739163f8724549302" // Use generate-hashes.html to create real hash
+    subproblems: [
+      { number: 1, answer: "cpxcedt{test}" },
+      { number: 2, answer: "cpxcedt{test2}" }
+    ]
   },
   {
     id: "engcu",
@@ -20,8 +22,12 @@ window.CTF_PROBLEMS = [
       { label: "ภาพถ่ายสุดลึกลับ", url: "assets/img/ENG.jpg" }
     ],
     hint: "ลองตรวจสอบ metadata ของภาพ metadata viewer ออนไลน์",
-    salt: "engcuengcu",
-    answerHash: "7aef6dcd34d2b5be91bea0c7ced53756bce46d5ced4ce3a3a358473bb0878c1e" // Use generate-hashes.html to create real hash
+    subproblems: [
+      { number: 1, answer: "cpxcedt{eng2}" },
+      { number: 2, answer: "cpxcedt{eng4}" },
+      { number: 3, answer: "cpxcedt{eng6}" },
+      { number: 4, answer: "cpxcedt{eng6}" }
+    ]
   },
   {
     id: "web-author",
@@ -31,13 +37,17 @@ window.CTF_PROBLEMS = [
       { label: "Quote", url: "https://mularstyle.github.io/QuoteOfTheDay/" }
     ],
     hint: "ลอง Inspect หน้าเว็บ",
-    salt: "webwebweb",
-    answerHash: "c2dd1e9f5dbb138a9820ead799f9e762097c677776d97083ef149da89520382a" // Use generate-hashes.html to create real hash
+    subproblems: [
+      { number: 1, answer: "cpxcedt{webflag}" }
+    ]
   }
 ];
 
 // Utility for solved state keys
-window.ctfSolvedKey = function getSolvedKey(problemId) {
+window.ctfSolvedKey = function getSolvedKey(problemId, subproblemNumber) {
+  if (subproblemNumber) {
+    return "ctf_solved_" + problemId + "_" + subproblemNumber;
+  }
   return "ctf_solved_" + problemId;
 }
 

@@ -22,23 +22,18 @@ Deployment (GitHub Pages)
 2) In the repository settings, enable GitHub Pages for the main branch (root).
 3) The site will be available at: https://<your-username>.github.io/<repo-name>/
 
-Answer Security & GitHub Pages
-This CTF uses **salted SHA-256 hashing** for highly secure answer verification that works on GitHub Pages:
+Answer System & Subproblems
+This CTF uses **plaintext answers** with **subproblem support**:
 - ✅ Works on GitHub Pages (no external files needed)
-- ✅ Answers stay secret (only salted hashes are visible in code)
-- ✅ **Extremely secure** - even with hash visible, answers cannot be reverse-engineered
-- ✅ Each problem has unique salt making brute force attacks impractical
+- ✅ **Subproblem support** - each problem can have multiple numbered subproblems
+- ✅ **Progress tracking** - individual subproblem completion is tracked
+- ✅ **Main page shows progress** - displays "2/3" for partially completed problems
 
 Adding New Problems
 1) Edit assets/js/data.js to add your problem metadata
-2) Use generate-hashes.html to create a salted answer hash:
-   - Open generate-hashes.html in your browser
-   - Enter your answer (it will be normalized: trimmed and lowercased)
-   - Enter a unique salt for this problem (make it long and unique)
-   - Copy the generated hash
-   - Add both "salt" and "answerHash" to your problem data
+2) Define subproblems with their answers:
 
-Example problem entry:
+Example single subproblem:
 {
   id: "my-problem",
   title: "My Problem",
@@ -47,14 +42,30 @@ Example problem entry:
     { label: "Hint resource", url: "https://example.com" }
   ],
   hint: "Try looking at...",
-  salt: "my_unique_problem_salt_string_2024_001",
-  answerHash: "abc123..." // Generated salted hash from generate-hashes.html
+  subproblems: [
+    { number: 1, answer: "cpxcedt{myflag}" }
+  ]
+}
+
+Example multiple subproblems:
+{
+  id: "multi-problem",
+  title: "Multiple Challenges",
+  description: "Solve all three parts...",
+  resources: [],
+  hint: "Each part has different clues",
+  subproblems: [
+    { number: 1, answer: "cpxcedt{part1}" },
+    { number: 2, answer: "cpxcedt{part2}" },
+    { number: 3, answer: "cpxcedt{part3}" }
+  ]
 }
 
 Notes
-- Solved state is stored in localStorage by key: ctf_solved_<problemId>
-- Answer checks are case-insensitive and trim whitespace before hashing
-- Hash verification happens entirely client-side using Web Crypto API
+- Solved state is stored in localStorage by key: ctf_solved_<problemId>_<subproblemNumber>
+- Answer checks are case-insensitive and trim whitespace
+- Main page shows "Solved" when all subproblems are completed, or "2/3" for partial progress
+- Users can select which subproblem to submit answers for via dropdown
 
 
 
