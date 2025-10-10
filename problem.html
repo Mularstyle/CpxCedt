@@ -27,9 +27,20 @@
                 <ul id="problem-resources" class="resources"></ul>
             </section>
 
+            <section class="subproblems-section">
+                <h3>Subproblems</h3>
+                <div id="subproblems-container">
+                    <!-- Subproblems will be dynamically generated here -->
+                </div>
+            </section>
+
             <section class="qa">
                 <h3>Answer</h3>
                 <form id="answer-form">
+                    <label for="subproblem-select" class="visually-hidden">Select Subproblem</label>
+                    <select id="subproblem-select" required>
+                        <option value="">Select a subproblem...</option>
+                    </select>
                     <label for="answer-input" class="visually-hidden">Answer</label>
                     <input id="answer-input" type="text" placeholder="CPxCEDT{Example}" autocomplete="off" required>
                     <button type="submit">Submit</button>
@@ -50,8 +61,8 @@
         <span>Good luck!</span>
     </footer>
 
-    <script src="assets/js/data.js"></script>
-    <script src="assets/js/problem.js"></script>
+    <script src="assets/js/data.js?v=3"></script>
+    <script src="assets/js/problem.js?v=3"></script>
 </body>
 </html>
 
