@@ -106,15 +106,22 @@ window.CTF_PROBLEMS = [
     ]
   },
   {
-    id: "web-author",
-    title: "Web: Author",
-    description: "Flag ซ่อนอยู่ใน html ใต้ชื่อผู้เขียนคำคม",
+    id: "wordinpic",
+    title: "Picture",
+    description: "มองภาพผ่านแผ่นสีแดงเพื่อหารหัสที่ซ้อนอยู่ จากนั้นนำข้อความที่ได้มาถอดรหัสด้วยตารางจะได้คำตอบ",
     resources: [
-      { label: "Quote", url: "https://mularstyle.github.io/QuoteOfTheDay/" }
+      { label: "ไม่มีจ้า", url: "" }
     ],
-    hint: "ลอง Inspect หน้าเว็บ",
+    hint: "ไม่มีจ้า",
     subproblems: [
-      { number: 1, answer: "cpxcedt{webflag}" }
+      { number: 1, answer: "OHNOERROR404NOTFOUND" },
+      { number: 2, answer: "CPXCEDTOMGLNWZA007" },
+      { number: 3, answer: "CAPTURETHEFLAGS101" },
+      { number: 4, answer: "39SYMMETRICENCRYPT93" },
+      { number: 5, answer: "SALADXCROISSANT2025" },
+      { number: 6, answer: "AVOIDPHISHINGSCAM2568" },
+      { number: 7, answer: "MALWAREGOAWAYPLZ555" },
+      { number: 8, answer: "1710PLAINTEXTTOCIPHER" }
     ]
   }
 ];
