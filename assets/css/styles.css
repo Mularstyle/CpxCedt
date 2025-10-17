@@ -38,11 +38,26 @@ body {
 
 .problems-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 .problem-card {
+  display: block;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 8px;
   padding: 12px;
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
+
+.problem-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.problem-card h3 { 
+  margin: 0;
+  color: var(--text);
+}
+
 .problem-card a { color: var(--text); text-decoration: none; }
 .problem-card .meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
 .problem-card.solved { outline: 2px solid var(--success); }

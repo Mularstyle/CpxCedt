@@ -36,14 +36,12 @@
     var solvedCount = getSolvedCount(problem);
     var totalCount = problem.subproblems ? problem.subproblems.length : 1;
     
-    var card = document.createElement('div');
-    card.className = 'problem-card' + (allSolved ? ' solved' : '');
-
-    var title = document.createElement('h3');
     var link = document.createElement('a');
     link.href = 'problem.html?id=' + encodeURIComponent(problem.id);
-    link.textContent = problem.title;
-    title.appendChild(link);
+    link.className = 'problem-card' + (allSolved ? ' solved' : '');
+
+    var title = document.createElement('h3');
+    title.textContent = problem.title;
 
     var meta = document.createElement('div');
     meta.className = 'meta';
@@ -52,9 +50,9 @@
     badge.textContent = allSolved ? 'Solved' : (solvedCount + '/' + totalCount);
     meta.appendChild(badge);
 
-    card.appendChild(title);
-    card.appendChild(meta);
-    return card;
+    link.appendChild(title);
+    link.appendChild(meta);
+    return link;
   }
 
   function renderList() {

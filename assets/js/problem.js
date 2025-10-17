@@ -63,7 +63,19 @@
       resEl.appendChild(li);
     });
 
-    hintText.textContent = problem.hint || 'No hint available.';
+    // Update hint handling to support both text and URLs
+    if (problem.hint && problem.hint.startsWith('http')) {
+      hintText.innerHTML = ''; // Clear existing content
+      var a = document.createElement('a');
+      a.href = problem.hint;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = problem.hint;
+      hintText.appendChild(a);
+    } else {
+      hintText.textContent = problem.hint || 'No hint available.';
+    }
+
     hintBtn.addEventListener('click', function () {
       var hidden = hintText.hasAttribute('hidden');
       if (hidden) {
