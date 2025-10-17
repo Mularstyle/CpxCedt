@@ -8,7 +8,7 @@ window.CTF_PROBLEMS = [
     resources: [
       { label: "ไม่มีจ้า" }
     ],
-    hint: "มีเว็บไซต์ที่ไว้ใช้ช่วยถอดรหัส Ceasar ได้",
+    hint: "https://www.boxentriq.com/code-breaking/caesar-cipher",
     subproblems: [
       { number: 1, answer: "INTANIACU" },
       { number: 2, answer: "LARNGEAR" },
